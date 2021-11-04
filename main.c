@@ -7,21 +7,11 @@
 #include <sys/stat.h>
 #include <time.h>
 #include <dirent.h>
-#define PATH "."
 
-void print_info(struct dirent *d){
-    struct stat *stt;
-
-}
-
-int main(){
-
-    
-
-
-    DIR *dir = opendir(PATH);
+int print_info(char * input){
+    DIR *dir = opendir(input);
     if(!dir){
-        printf("Can't open directory with error\n%s\n", strerror(errno));
+        printf("Can't open directory with error: %s\n", strerror(errno));
         return 0;
     }
 
@@ -51,5 +41,27 @@ int main(){
     }
     printf("Total directory size: %ld Bytes\n", size);
     closedir(dir);
+}
+
+int main(int argc, char *argv[]){
+    char input [100];
+    if(argc == 1){
+        printf("Enter a directory path: ");
+        fgets(input, 100, stdin);
+        *strchr(input, '\n') = '\0';
+    } else if (argc == 2) {
+        strcpy(input, argv[1]);
+    } else {
+        printf("Only taking the first command line argument!\n");
+        strcpy(input, argv[1]);
+    }
+    printf("%s\n", input);
+    if(!opendir(input)){
+        printf("%d", argc);
+        printf("Can't open directory with error: %s\n", strerror(errno));
+        return 0;
+    }
+    print_info(input);
+    
     return 0;
 }
